@@ -30,11 +30,11 @@ const SubTitle = styled.h2`
   color: #e9e9e9;
 `;
 
-const Home = () => {
+const BooksPage = () => {
   return (
     <Container>
       <MainPanel>
-        <Title>Second Page</Title>
+        <Title>Books Page</Title>
         <One />
         <Two />
       </MainPanel>
@@ -42,4 +42,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default BooksPage;
