@@ -208,18 +208,16 @@ const BookDetailPage = () => {
     checkValues();
   };
 
-
-    const handleReturn = async () => {
-      const book = await ReturnBook(Id, userID);
-      if (book === "book returned") {
-        setAPIMessage("Return book successfully!");
-        setModalVisible(true);
-      } else {
-        setAPIMessage("Something Wrong, pleas try later.");
-        setModalVisible(true);
-      }
-    };
-
+  const handleReturn = async () => {
+    const book = await ReturnBook(Id, userID);
+    if (book === "book returned") {
+      setAPIMessage("Return book successfully!");
+      setModalVisible(true);
+    } else {
+      setAPIMessage("Something Wrong, pleas try later.");
+      setModalVisible(true);
+    }
+  };
 
   const handleDelete = async () => {
     const book = await DeleteBook(Id);
@@ -268,10 +266,12 @@ const BookDetailPage = () => {
       APIMessage === "Delete book successfully!" ||
       APIMessage === "Cannot find the book, try again later."
     ) {
-      JavaScripts:window.location.href = "/#/books";
-    }else if
-    (APIMessage === "Add book successfully!")
-      {  JavaScripts:window.location.href = "/#/book/"+Id;
+      JavaScripts: window.location.href = "/#/books";
+    } else if (
+      APIMessage === "Add book successfully!" ||
+      APIMessage === "Return book successfully!"
+    ) {
+      JavaScripts: window.location.href = "/#/book/" + Id;
     }
   };
 
