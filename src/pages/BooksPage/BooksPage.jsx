@@ -33,22 +33,6 @@ const ButtonPanel = styled.div`
   justify-content: space-around;
 `;
 
-const RecentUsers = styled.div`
-  height: auto;
-  margin: auto;
-  margin-bottom: 50px;
-  text-align: center;
-  width: 48%;
-  padding: 20px;
-  height: auto;
-  background-color: #f0edebae;
-  border-radius: 10px;
-  margin-right: 4%;
-  @media (max-width: 768px) {
-    width: 90%;
-  }
-`;
-
 const RecentBooks = styled.div`
   height: auto;
   margin: auto;
@@ -67,6 +51,13 @@ const RecentBooks = styled.div`
 const RecentPanel = styled.div`
   margin-top: 10px;
   display: flex;
+`;
+
+const TitlePanel = styled.div`
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 
 const Text = styled.div`
@@ -90,6 +81,9 @@ const BooksPage = () => {
       <MainPanel>
         <Header />
         <ButtonPanel>
+          <Link to="/book/new" style={{ textDecoration: "none" }}>
+            <Button>Add New Book</Button>
+          </Link>
           <Link to="/users" style={{ textDecoration: "none" }}>
             <Button>View All Users</Button>
           </Link>
@@ -100,7 +94,14 @@ const BooksPage = () => {
         <RecentPanel>
           <RecentBooks>
             <br />
-            <Text>All Books</Text>
+            <TitlePanel>
+              <Text>All Books</Text>
+              <br/>
+              <Link to="/book/new" style={{ textDecoration: "none" }}>
+                <Button>Add New Book</Button>
+              </Link>
+              <br/>
+            </TitlePanel>
             {allBook?.map((book, key) => {
               return <BookInfo Book={book} />;
             })}

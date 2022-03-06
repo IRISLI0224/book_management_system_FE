@@ -5,8 +5,13 @@ import BookCoverImg from "../../assets/img/bookCover1.png";
 import { Link } from "react-router-dom";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { useParams } from "react-router-dom";
-import { UpdateBookById, getBookById, DeleteBook } from "../../config/book";
+import { useParams, useLocation } from "react-router-dom";
+import {
+  UpdateBookById,
+  getBookById,
+  DeleteBook,
+  CreateBook,
+} from "../../config/book";
 import { Modal } from "antd";
 import InputErrorMsg from "../../components/InputErrorMsg";
 import "antd/dist/antd.css";
@@ -99,20 +104,37 @@ const TopButtonPanel = styled.div`
   justify-content: space-around;
 `;
 
+const AddButtonPanel = styled.div`
+    display: flex;
+    width: 100%;
+    height: 20px;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+}
+`;
+
 const BookDetailPage = () => {
   const [borrowed, setBorrowed] = useState(false);
   const [name, setName] = useState();
   const [author, setAuthor] = useState();
-  const [categories, setCategories] = useState();
+  const [categories, setCategories] = useState('Horror');
   const [modalVisible, setModalVisible] = useState(false);
   const [user, setUser] = useState();
   const [nameError, setNameError] = useState(false);
   const [authorError, setAuthorError] = useState(false);
   const [APIMessage, setAPIMessage] = useState("");
-  const Id = useParams().id;
+  const [Id,setId] =useState(useParams().id);
+  const path = useLocation().pathname;
+  const [add, setAdd] = useState(false);
 
   useEffect(() => {
-    getBookInfo();
+    if (path.indexOf("new") > 0) {
+      //Add new
+      setAdd(true);
+    }
+    //Edit
+    else getBookInfo();
   }, []);
 
   const getBookInfo = async () => {
@@ -141,6 +163,8 @@ const BookDetailPage = () => {
   const handleOnBlur = (event) => {
     const { value, name } = event.target;
   };
+
+
   const handleDataChange = (event) => {
     const { value, name } = event.target;
     switch (name) {
@@ -174,7 +198,10 @@ const BookDetailPage = () => {
     } else {
       setAuthorError(false);
     }
-    if (!nameError && !authorError) EditBook();
+    if (!nameError && !authorError)
+      if (add) {
+        AddNewBook();
+      } else EditBook();
   };
 
   const handleSubmit = () => {
@@ -215,6 +242,26 @@ const BookDetailPage = () => {
     }
   };
 
+  const AddNewBook = async () => {
+    const book = await CreateBook(name, author, categories);
+    //test console
+    console.log(book.status);
+    if (book.status == "201") {
+      setId(book?.data?._id)
+      //test console
+      console.log(book.data)
+      console.log(Id)
+      setAPIMessage("Add book successfully!");
+      setModalVisible(true);
+    } else if (book.status == "403") {
+      setAPIMessage("Book already exists!");
+      setModalVisible(true);
+    } else {
+      setAPIMessage("Something Wrong, pleas try later.");
+      setModalVisible(true);
+    }
+  };
+
   const Redirection = () => {
     setModalVisible(false);
     //After delete, back to all books page
@@ -223,7 +270,12 @@ const BookDetailPage = () => {
       APIMessage === "Cannot find the book, try again later."
     ) {
       window.location.href = "/books";
+    }else if
+    (APIMessage === "Add book successfully!")
+      {  window.location.href = "/book/"+Id;
     }
+
+    
   };
 
   return (
@@ -255,7 +307,18 @@ const BookDetailPage = () => {
         <Form>
           <br />
           <br />
-          <Text>Book detail information</Text>
+          {add ? (
+            <AddButtonPanel>
+              <Text>Add new book</Text>
+              <br />
+              <Button onClick={handleSubmit}>
+                &nbsp;&nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;&nbsp;
+              </Button>
+            </AddButtonPanel>
+          ) : (
+            <Text>Book detail information</Text>
+          )}
+
           <Fields>
             <BookCover src={BookCoverImg} />
             <InputFields>
@@ -303,20 +366,23 @@ const BookDetailPage = () => {
                 </select>
               </InputPanel>
             </InputFields>
-            <ButtonPanel>
-              <InputPanel>
-                {borrowed ? (
-                  <div>Status:&nbsp;&nbsp;Borrowed by {user} </div>
-                ) : (
-                  <div>Status:&nbsp;&nbsp;In stock&nbsp;&nbsp;</div>
-                )}
-              </InputPanel>
-              {borrowed ? <Button>Return the book</Button> : <br />}
-              <br />
-              <Button onClick={handleSubmit}>Submit</Button>
-              <br />
-              <Button onClick={handleDelete}>Delete</Button>
-            </ButtonPanel>
+            {!add ? (
+              <ButtonPanel>
+                <InputPanel>
+                  {borrowed ? (
+                    <div>Status:&nbsp;&nbsp;Borrowed by {user} </div>
+                  ) : (
+                    <div>Status:&nbsp;&nbsp;In stock&nbsp;&nbsp;</div>
+                  )}
+                </InputPanel>
+
+                {borrowed ? <Button>Return the book</Button> : <br />}
+                <br />
+                <Button onClick={handleSubmit}>Submit</Button>
+                <br />
+                {!add ? <Button onClick={handleDelete}>Delete</Button> : null}
+              </ButtonPanel>
+            ) : null}
           </Fields>
         </Form>
         <Footer />
