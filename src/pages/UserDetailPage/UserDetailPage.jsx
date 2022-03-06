@@ -290,9 +290,9 @@ const UserDetailPage = () => {
       APIMessage === "Delete user successfully!" ||
       APIMessage === "Cannot find the user, try again later."
     ) {
-      JavaScripts:window.location.href = "/users";
+      JavaScripts:window.location.href = "/#/users";
     } else if (APIMessage === "Add user successfully!") {
-      JavaScripts:window.location.href = "/user/" + Id;
+      JavaScripts:window.location.href = "/#/user/" + Id;
     }
   };
 

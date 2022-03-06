@@ -251,10 +251,10 @@ const BookDetailPage = () => {
       APIMessage === "Delete book successfully!" ||
       APIMessage === "Cannot find the book, try again later."
     ) {
-      JavaScripts:window.location.href = "/books";
+      JavaScripts:window.location.href = "/#/books";
     }else if
     (APIMessage === "Add book successfully!")
-      {  JavaScripts:window.location.href = "/book/"+Id;
+      {  JavaScripts:window.location.href = "/#/book/"+Id;
     }
 
     

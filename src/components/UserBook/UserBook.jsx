@@ -78,7 +78,7 @@ const UserBook = ({ userid, Book }) => {
       APIMessage === "Delete user successfully!" ||
       APIMessage === "Cannot find the user, try again later."
     ) {
-      JavaScripts:window.location.href = "/users";
+      JavaScripts:window.location.href = "/#/users";
     }
   };
 
