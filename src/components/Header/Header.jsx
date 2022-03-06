@@ -14,7 +14,7 @@ const Container = styled.div`
   background-position: center;
   position: relative;
   padding: 15px 0px;
-  z-index: 0;
+
 `;
 const Title = styled.h1`
   margin-top: 100px;

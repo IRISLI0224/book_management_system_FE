@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button } from "../../components/Button";
 import BookCoverImg from "../../assets/img/bookCover1.png";
 import { Link } from "react-router-dom";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import { useParams } from "react-router-dom";
+import { UpdateBookById, getBookById, DeleteBook } from "../../config/book";
+import { Modal } from "antd";
+import InputErrorMsg from "../../components/InputErrorMsg";
+import "antd/dist/antd.css";
 
 const Container = styled.div`
   height: auto;
@@ -28,7 +33,6 @@ const Form = styled.div`
   height: 350px;
   margin: auto;
   text-align: center;
-  width: 100%;
   border-radius: 10px;
   background: #f0edeb;
 `;
@@ -56,16 +60,9 @@ const Input = styled.input`
 const InputPanel = styled.div`
   margin: auto;
   justify-content: center;
-  padding: 20px;
+  padding-top: 20px;
   display: flex;
-  margin-bottom: 10px;
-`;
-
-const InputInnerPanel = styled.div`
-  margin: auto;
-  justify-content: center;
-  padding: 20px;
-  display: flex;
+  margin-bottom: 5px;
 `;
 
 const Fields = styled.div`
@@ -98,6 +95,39 @@ const BookDetailPage = () => {
   const [name, setName] = useState();
   const [author, setAuthor] = useState();
   const [categories, setCategories] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [user, setUser] = useState();
+  const [nameError, setNameError] = useState(false);
+  const [authorError, setAuthorError] = useState(false);
+  const [APIMessage, setAPIMessage] = useState("");
+  const Id = useParams().id;
+
+  useEffect(() => {
+    getBookInfo();
+  }, []);
+
+  const getBookInfo = async () => {
+    const book = await getBookById(Id);
+    //test console
+    console.log(typeof(book));
+    if (typeof(book)!=='string') {
+      const Data = book;
+      setAuthor(Data?.author);
+      setName(Data?.name);
+      setCategories(Data?.categories);
+      setBorrowed(Data?.borrowed);
+      if (Data?.borrowed) {
+        const user = Data?.user;
+        setUser(user?.name);
+      }
+    } else {
+      setAPIMessage("Cannot find the book, try again later.");
+      setModalVisible(true);
+    }
+
+    // //test console
+    // console.log(book);
+  };
 
   const handleOnBlur = (event) => {
     const { value, name } = event.target;
@@ -122,16 +152,87 @@ const BookDetailPage = () => {
     }
   };
 
+  const checkValues = () => {
+    if (!name || name === "") {
+      setNameError(true);
+      return;
+    } else {
+      setNameError(false);
+    }
+    if (!author || author === "") {
+      setAuthorError(true);
+      return;
+    } else {
+      setAuthorError(false);
+    }
+    if (!nameError && !authorError) EditBook();
+  };
+
   const handleSubmit = () => {
     //test console
     console.log(name);
     console.log(author);
     console.log(categories);
+    console.log(Id);
+    checkValues();
+  };
 
+  const handleDelete = async () => {
+    const book = await DeleteBook(Id);
+    //test console
+    console.log(book)
+    if (book == "book deleted") {
+      setAPIMessage("Delete book successfully!");
+      setModalVisible(true);
+    } else {
+      setAPIMessage("Something Wrong, pleas try later.");
+      setModalVisible(true);
+    }
+  };
+
+  const EditBook = async () => {
+    const book = await UpdateBookById(Id, name, author, categories);
+    //test console
+    console.log(book.status);
+    if (book.status == "200") {
+      setAPIMessage("Edit book successfully");
+      setModalVisible(true);
+    } else if (book.status == "403") {
+      setAPIMessage("Book already exists!");
+      setModalVisible(true);
+    } else {
+      setAPIMessage("Something Wrong, pleas try later.");
+      setModalVisible(true);
+    }
+  };
+
+  const Redirection = () => {
+    setModalVisible(false);
+    //After delete, back to all books page
+    if (
+      APIMessage == "Delete book successfully!" ||
+      APIMessage == "Cannot find the book, try again later."
+    ) {
+      window.location.href = "/books";
+    }
   };
 
   return (
     <Container>
+      <Modal
+        visible={modalVisible}
+        footer={[
+          <div style={{ marginLeft: "200px" }}>
+            <Button key="OK" onClick={Redirection}>
+              &nbsp;&nbsp;OK&nbsp;&nbsp;
+            </Button>
+          </div>,
+        ]}
+      >
+        <p></p>
+        <p>{APIMessage}</p>
+        <p></p>
+      </Modal>
       <MainPanel>
         <Header />
         <Form>
@@ -146,22 +247,36 @@ const BookDetailPage = () => {
                   name="name"
                   onChange={handleDataChange}
                   onBlur={handleOnBlur}
+                  value={name}
                 />
               </InputPanel>
+              {nameError ? (
+                <InputErrorMsg>Name can't be empty!</InputErrorMsg>
+              ) : (
+                <br />
+              )}
+              <br />
               <InputPanel>
                 <div>Author:</div>
                 <Input
                   name="author"
                   onChange={handleDataChange}
                   onBlur={handleOnBlur}
+                  value={author}
                 />
               </InputPanel>
+              {authorError ? (
+                <InputErrorMsg>Author can't be empty!</InputErrorMsg>
+              ) : (
+                <br />
+              )}
               <InputPanel>
                 <div>Categories:&nbsp;&nbsp;</div>
                 <select
                   name="categories"
                   onChange={handleDataChange}
                   onBlur={handleOnBlur}
+                  value={categories}
                 >
                   <option value="Horror">Horror</option>
                   <option value="Drama">Drama</option>
@@ -172,7 +287,7 @@ const BookDetailPage = () => {
             <ButtonPanel>
               <InputPanel>
                 {borrowed ? (
-                  <div>Status:&nbsp;&nbsp;Borrowed by User A </div>
+                  <div>Status:&nbsp;&nbsp;Borrowed by {user} </div>
                 ) : (
                   <div>Status:&nbsp;&nbsp;In stock&nbsp;&nbsp;</div>
                 )}
@@ -181,7 +296,7 @@ const BookDetailPage = () => {
               <br />
               <Button onClick={handleSubmit}>Submit</Button>
               <br />
-              <Button>Delete</Button>
+              <Button onClick={handleDelete}>Delete</Button>
             </ButtonPanel>
           </Fields>
         </Form>

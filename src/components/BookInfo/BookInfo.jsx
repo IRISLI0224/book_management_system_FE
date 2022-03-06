@@ -25,7 +25,7 @@ const Text = styled.div`
 `;
 
 const BookCover = styled.img`
-  height: 90px;
+  height: 70px;
   width: auto;
   margin-left: 10px;
 `;
@@ -35,7 +35,6 @@ const InfoPanel = styled.div`
 `;
 
 const ButtonPanel = styled.div`
-  height: 90px;
   width: auto;
   margin-left: 10px;
   display: flex;

@@ -8,7 +8,7 @@ const API_UPDATE_BOOK = "/books";
 const API_DELETE_BOOK = "/books";
 const API_BORROW_BOOK = "/books/borrow";
 
-export const getAllBooks = async (id) => {
+export const getAllBooks = async () => {
   const url = `${API_GET_ALL_BOOKS}`;
   try {
     const response = await backendApi.get(url);
@@ -23,10 +23,12 @@ export const getBookById = async (id) => {
   const url = `${API_GET_BOOK}/${id}`;
   try {
     const response = await backendApi.get(url);
+    //test console
+    console.log(response)
     return response.data;
   } catch (e) {
     console.log(e);
-    return e;
+    return ('Cannot find the book');
   }
 };
 
