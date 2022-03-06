@@ -55,6 +55,9 @@ const BookCover = styled.img`
   height: 200px;
   width: auto;
   margin-top: 50px;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const Input = styled.input`
@@ -148,6 +151,7 @@ const UserDetailPage = () => {
   const [add, setAdd] = useState(false);
   const [borrowedBooks,setBorrowedBooks]=useState();
 
+
   useEffect(() => {
     if (path.indexOf("new") > 0) {
       //Add new
@@ -209,8 +213,6 @@ const UserDetailPage = () => {
       setNameError(false);
     }
     const checkEmail = validate("email", email);
-    //test console
-    console.log(checkEmail);
     if (checkEmail !== "") {
       setEmailError(true);
       return;
@@ -224,22 +226,10 @@ const UserDetailPage = () => {
   };
 
   const handleSubmit = () => {
-    //test console
-    console.log("running");
-    console.log(name);
-    console.log(email);
-    console.log(phone);
-    console.log(date_of_birth);
     checkValues();
   };
 
   const handleAddNew = () => {
-    //test console
-    console.log("running");
-    console.log(name);
-    console.log(email);
-    console.log(phone);
-    console.log(date_of_birth);
     checkValues();
   };
 
@@ -400,7 +390,7 @@ const UserDetailPage = () => {
             ) : null}
           </MainContent>
         </Form>
-        <UserBook userid={Id} Book={borrowedBooks}/>
+        {!add?<UserBook userid={Id} Book={borrowedBooks}/>:null}
         <Footer />
       </MainPanel>
     </Container>

@@ -6,6 +6,9 @@ import { Button } from "../../components/Button";
 import BookInfo from "../../components/BookInfo";
 import { Link } from "react-router-dom";
 import { getAllBooks } from "../../config/book";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import {appendData} from '../../redux/action'
 
 const Container = styled.div`
   height: auto;
@@ -31,6 +34,11 @@ const ButtonPanel = styled.div`
   padding: 60px 0px;
   background: #f0edeb;
   justify-content: space-around;
+  @media (max-width: 768px) {
+    align-content: space-between;
+    display:flex;
+    flex-wrap: wrap;
+  }
 `;
 
 const RecentBooks = styled.div`
@@ -67,10 +75,23 @@ const Text = styled.div`
 
 const BooksPage = () => {
   const [allBook, setAllBook] = useState();
+  let dispatch = useDispatch();
+  let state = useSelector((state) => state);
 
   useEffect(() => {
     getBooks();
   }, []);
+
+  useEffect(() => {
+    handleDispatch();
+  }, [allBook]);
+
+  
+  const handleDispatch = () => {
+    dispatch(appendData({
+      AllBooks: allBook
+    }));
+  };
 
   const getBooks = async () => {
     const books = await getAllBooks();
@@ -102,7 +123,7 @@ const BooksPage = () => {
               </Link>
               <br/>
             </TitlePanel>
-            {allBook?.map((book, key) => {
+            {state?.AllBooks?.map((book, key) => {
               return <BookInfo Book={book} />;
             })}
           </RecentBooks>

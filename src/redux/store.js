@@ -7,7 +7,7 @@ import ReduxThunk from 'redux-thunk';
 const storageConfig = {
     key: 'root', 
     storage:storage, 
-    whitelist: ['id','email'] 
+    whitelist: ['BorrowedBooks','InStockBooks','AllBooks','AllUsers'] 
 }
 
 const middlewares = [ReduxThunk];

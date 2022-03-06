@@ -11,6 +11,7 @@ import {
   getBookById,
   DeleteBook,
   CreateBook,
+  ReturnBook,
 } from "../../config/book";
 import { Modal } from "antd";
 import InputErrorMsg from "../../components/InputErrorMsg";
@@ -51,6 +52,9 @@ const BookCover = styled.img`
   height: 200px;
   width: auto;
   margin-top: 50px;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const Input = styled.input`
@@ -118,13 +122,14 @@ const BookDetailPage = () => {
   const [borrowed, setBorrowed] = useState(false);
   const [name, setName] = useState();
   const [author, setAuthor] = useState();
-  const [categories, setCategories] = useState('Horror');
+  const [categories, setCategories] = useState("Horror");
   const [modalVisible, setModalVisible] = useState(false);
   const [user, setUser] = useState();
+  const [userID, setUserID] = useState();
   const [nameError, setNameError] = useState(false);
   const [authorError, setAuthorError] = useState(false);
   const [APIMessage, setAPIMessage] = useState("");
-  const [Id,setId] =useState(useParams().id);
+  const [Id, setId] = useState(useParams().id);
   const path = useLocation().pathname;
   const [add, setAdd] = useState(false);
 
@@ -148,18 +153,17 @@ const BookDetailPage = () => {
       if (Data?.borrowed) {
         const user = Data?.user;
         setUser(user?.name);
+        setUserID(user?._id);
       }
     } else {
       setAPIMessage("Cannot find the book, try again later.");
       setModalVisible(true);
     }
-
   };
 
   const handleOnBlur = (event) => {
     const { value, name } = event.target;
   };
-
 
   const handleDataChange = (event) => {
     const { value, name } = event.target;
@@ -204,6 +208,19 @@ const BookDetailPage = () => {
     checkValues();
   };
 
+
+    const handleReturn = async () => {
+      const book = await ReturnBook(Id, userID);
+      if (book === "book returned") {
+        setAPIMessage("Return book successfully!");
+        setModalVisible(true);
+      } else {
+        setAPIMessage("Something Wrong, pleas try later.");
+        setModalVisible(true);
+      }
+    };
+
+
   const handleDelete = async () => {
     const book = await DeleteBook(Id);
     if (book === "book deleted") {
@@ -232,7 +249,7 @@ const BookDetailPage = () => {
   const AddNewBook = async () => {
     const book = await CreateBook(name, author, categories);
     if (book.status == "201") {
-      setId(book?.data?._id)
+      setId(book?.data?._id);
       setAPIMessage("Add book successfully!");
       setModalVisible(true);
     } else if (book.status == "403") {
@@ -256,8 +273,6 @@ const BookDetailPage = () => {
     (APIMessage === "Add book successfully!")
       {  JavaScripts:window.location.href = "/#/book/"+Id;
     }
-
-    
   };
 
   return (
@@ -358,7 +373,11 @@ const BookDetailPage = () => {
                   )}
                 </InputPanel>
 
-                {borrowed ? <Button>Return the book</Button> : <br />}
+                {borrowed ? (
+                  <Button onClick={handleReturn}>Return the book</Button>
+                ) : (
+                  <br />
+                )}
                 <br />
                 <Button onClick={handleSubmit}>Submit</Button>
                 <br />

@@ -69,6 +69,7 @@ const RecentBooks = styled.div`
 const RecentPanel = styled.div`
   margin-top: 10px;
   display: flex;
+  flex-wrap: wrap;
 `;
 
 const Text = styled.div`
@@ -91,8 +92,6 @@ const Home = () => {
   };
   const getUsers = async () => {
     const users = await getRecentUsers();
-    //test console
-    console.log(users);
     if (users) setUsers(users);
   };
   return (

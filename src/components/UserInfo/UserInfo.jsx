@@ -6,6 +6,9 @@ import { Link } from "react-router-dom";
 import { DeleteUser } from "../../config/user";
 import { Modal } from "antd";
 import "antd/dist/antd.css";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { appendData } from "../../redux/action";
 const moment = require("moment");
 
 const Container = styled.div`
@@ -23,6 +26,12 @@ const Container = styled.div`
   background: #d6b8b07f;
   margin-top: 15px;
   display: flex;
+  @media (max-width: 768px) {
+    width: 95%;
+    margin-left: 2.5%;
+    height: 160px;
+    flex-wrap: wrap;
+  }
 `;
 const Text = styled.div`
   color: #5c4c4c;
@@ -32,10 +41,17 @@ const BookCover = styled.img`
   height: 70px;
   width: auto;
   margin-left: 10px;
+  @media (max-width: 768px) {
+    height: 30px;
+  }
 `;
 
 const InfoPanel = styled.div`
   width: 80%;
+  flex-wrap: wrap;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const ButtonPanel = styled.div`
@@ -44,50 +60,61 @@ const ButtonPanel = styled.div`
   display: flex;
   align-items: center;
   margin-right: 20px;
+
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    margin:auto;
+  }
 `;
 
 const UserInfo = ({ recent, User }) => {
   const url = "/user/" + User?._id;
   const [APIMessage, setAPIMessage] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  let dispatch = useDispatch();
+  let state = useSelector((state) => state);
 
   const handleDelete = async () => {
     const user = await DeleteUser(User?._id);
     if (user === "user deleted") {
-      setAPIMessage("Delete user successfully!");
-      setModalVisible(true);
-    } else {
-      setAPIMessage("Something Wrong, pleas try later.");
-      setModalVisible(true);
+      const Users = state?.AllUsers.slice();
+      delete Users[Users.indexOf(User)];
+      dispatch(
+        appendData({
+          AllUsers: Users,
+        })
+      );
     }
   };
 
-  const Redirection = () => {
-    setModalVisible(false);
-    //After delete, back to all user page
-    if (
-      APIMessage === "Delete user successfully!" ||
-      APIMessage === "Cannot find the user, try again later."
-    ) {
-      JavaScripts:window.location.href = "/#/users";
-    }
+  const displayModal = () => {
+    setModalVisible(true);
   };
+
+  const handleCancel = () => {
+    setModalVisible(false);
+  };
+
+
 
   return (
     <Container>
       <Modal
         visible={modalVisible}
         footer={[
-          <div style={{ marginLeft: "200px" }}>
-            <Button key="OK" onClick={Redirection}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Button key="Cancel" onClick={handleCancel}>
+              &nbsp;&nbsp;Cancel&nbsp;&nbsp;
+            </Button>
+            <Button key="OK" onClick={handleDelete}>
               &nbsp;&nbsp;OK&nbsp;&nbsp;
             </Button>
           </div>,
         ]}
       >
-        <p></p>
-        <p>{APIMessage}</p>
-        <p></p>
+        <br/>
+        <p>Do you want to delete the user?</p>
+        <br/>
       </Modal>
       <BookCover src={Avatar} />
       <InfoPanel>
@@ -110,7 +137,7 @@ const UserInfo = ({ recent, User }) => {
               <Button>&nbsp;&nbsp;Edit&nbsp;&nbsp;</Button>
             </Link>
             <div>&nbsp;&nbsp;&nbsp;</div>
-            <Button onClick={handleDelete}>Delete</Button>
+            <Button onClick={displayModal}>Delete</Button>
           </ButtonPanel>
         )}
       </ButtonPanel>
