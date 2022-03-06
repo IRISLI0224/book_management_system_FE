@@ -69,7 +69,7 @@ const UserInfo = ({ recent, User }) => {
       APIMessage === "Delete user successfully!" ||
       APIMessage === "Cannot find the user, try again later."
     ) {
-      window.location.href = "/users";
+      JavaScripts:window.location.href = "/users";
     }
   };
 

@@ -82,7 +82,7 @@ const BorrowedBookInfo = ({ Book, Borrow, userId }) => {
       APIMessage === "Borrow book successfully!" ||
       APIMessage === "Return book successfully!"
     ) {
-      window.location.reload();
+      JavaScripts:window.location.reload();
     }
   };
 

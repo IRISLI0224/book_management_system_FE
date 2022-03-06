@@ -70,7 +70,7 @@ const BookInfo = ({ recent, Book }) => {
       APIMessage === "Delete book successfully!" ||
       APIMessage === "Cannot find the book, try again later."
     ) {
-      window.location.href = "/books";
+      JavaScripts:window.location.href = "/books";
     }
   };
 
