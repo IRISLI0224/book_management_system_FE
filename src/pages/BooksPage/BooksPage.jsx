@@ -1,14 +1,18 @@
 import React from "react";
 import styled from "styled-components";
-import One from "../../components/Header";
-import Two from "../../components/Two";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import { Button } from "../../components/Button";
+import BookInfo from "../../components/BookInfo";
+import UserInfo from "../../components/UserInfo";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   height: auto;
   margin: auto;
   text-align: center;
   width: 100%;
-  background-color: #edf6ff;
+  background-color: #ffffff;
 `;
 
 const MainPanel = styled.div`
@@ -16,30 +20,87 @@ const MainPanel = styled.div`
   height: auto;
   margin: auto;
   text-align: center;
-  width: 80%;
-  background-image: -webkit-linear-gradient(-90deg, #5e85fc 0%, #c46dfd 100%);
+  width: 95%;
   border-radius: 10px;
 `;
 
-const Title = styled.h1`
-  margin-top: 100px;
-  color: #e9e9e9;
+const ButtonPanel = styled.div`
+  display: flex;
+  width: 100%;
+  height: auto;
+  padding: 60px 0px;
+  background: #f0edeb;
+  justify-content: space-around;
 `;
 
-const SubTitle = styled.h2`
-  color: #e9e9e9;
+const RecentUsers = styled.div`
+  height: auto;
+  margin: auto;
+  margin-bottom: 50px;
+  text-align: center;
+  width: 48%;
+  padding: 20px;
+  height: auto;
+  background-color: #f0edebae;
+  border-radius: 10px;
+  margin-right: 4%;
+  @media (max-width: 768px) {
+    width: 90%;
+  }
+`;
+
+const RecentBooks = styled.div`
+  height: auto;
+  margin: auto;
+  margin-bottom: 50px;
+  padding: 20px;
+  text-align: center;
+  width: 80%;
+  height: auto;
+  background-color: #f0edebae;
+  border-radius: 10px;
+  @media (max-width: 768px) {
+    width: 90%;
+  }
+`;
+
+const RecentPanel = styled.div`
+  margin-top: 10px;
+  display: flex;
+`;
+
+const Text = styled.div`
+  color: #8b6c64;
+  font-size: 20px;
 `;
 
 const BooksPage = () => {
   return (
     <Container>
       <MainPanel>
-        <Title>Books Page</Title>
-        <One />
-        <Two />
+        <Header />
+        <ButtonPanel>
+          <Link to="/users" style={{ textDecoration: "none" }}>
+            <Button>View All Users</Button>
+          </Link>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Button>Back to Homepage</Button>
+          </Link>
+        </ButtonPanel>
+        <RecentPanel>
+          <RecentBooks>
+            <br />
+            <Text>Recent Books</Text>
+            <BookInfo />
+            <BookInfo />
+            <BookInfo />
+            <BookInfo />
+            <BookInfo />
+          </RecentBooks>
+        </RecentPanel>
+        <Footer />
       </MainPanel>
     </Container>
   );
 };
-
 export default BooksPage;

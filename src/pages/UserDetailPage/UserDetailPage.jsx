@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import One from "../../components/Header";
-import Two from "../../components/Two";
+
 
 const Container = styled.div`
   height: auto;
@@ -36,7 +36,6 @@ const UserDetailPage = () => {
       <MainPanel>
         <Title>User Detail Page</Title>
         <One />
-        <Two />
       </MainPanel>
     </Container>
   );

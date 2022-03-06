@@ -5,7 +5,7 @@ const Container = styled.div`
   box-shadow: rgb(0 0 0 / 20%) 0px 0.0625rem 0.1875rem 0px;
   border-radius: 0.1875rem;
   width: 100%;
-  height: 200px;
+  height: 100px;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -14,7 +14,7 @@ const Container = styled.div`
   z-index: 0;
   background: #d6b8b0;
 `;
-const SubTitle = styled.h3`
+const SubTitle = styled.div`
   color: #ffffff;
 `;
 

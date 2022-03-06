@@ -3,6 +3,9 @@ import styled from "styled-components";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { Button } from "../../components/Button";
+import BookInfo from "../../components/BookInfo";
+import UserInfo from "../../components/UserInfo";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   height: auto;
@@ -36,10 +39,11 @@ const RecentUsers = styled.div`
   margin-bottom: 50px;
   text-align: center;
   width: 48%;
-  height: 300px;
+  padding: 20px;
+  height: auto;
   background-color: #f0edebae;
   border-radius: 10px;
-  margin-right:4%;
+  margin-right: 4%;
   @media (max-width: 768px) {
     width: 90%;
   }
@@ -49,9 +53,10 @@ const RecentBooks = styled.div`
   height: auto;
   margin: auto;
   margin-bottom: 50px;
+  padding: 20px;
   text-align: center;
   width: 48%;
-  height: 300px;
+  height: auto;
   background-color: #f0edebae;
   border-radius: 10px;
   @media (max-width: 768px) {
@@ -65,7 +70,8 @@ const RecentPanel = styled.div`
 `;
 
 const Text = styled.div`
-  color: #d6b8b0;
+  color: #8b6c64;
+  font-size: 20px;
 `;
 
 const Home = () => {
@@ -74,17 +80,31 @@ const Home = () => {
       <MainPanel>
         <Header />
         <ButtonPanel>
-          <Button>View All Users</Button>
-          <Button>View All Books</Button>
+          <Link to="/users" style={{ textDecoration: "none" }}>
+            <Button>View All Users</Button>
+          </Link>
+          <Link to="/books" style={{ textDecoration: "none" }}>
+            <Button>View All Books</Button>
+          </Link>
         </ButtonPanel>
         <RecentPanel>
           <RecentUsers>
             <br />
             <Text>Recent Users</Text>
+            <UserInfo recent='true'/>
+            <UserInfo recent='true'/>
+            <UserInfo recent='true'/>
+            <UserInfo recent='true'/>
+            <UserInfo recent='true'/>
           </RecentUsers>
           <RecentBooks>
             <br />
             <Text>Recent Books</Text>
+            <BookInfo recent='true'/>
+            <BookInfo recent='true'/>
+            <BookInfo recent='true'/>
+            <BookInfo recent='true'/>
+            <BookInfo recent='true'/>
           </RecentBooks>
         </RecentPanel>
         <Footer />
