@@ -7,6 +7,9 @@ import BookInfo from "../../components/BookInfo";
 import UserInfo from "../../components/UserInfo";
 import { Link } from "react-router-dom";
 import { getAllUsers } from "../../config/user";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import {appendData} from '../../redux/action'
 
 const Container = styled.div`
   height: auto;
@@ -32,6 +35,11 @@ const ButtonPanel = styled.div`
   padding: 60px 0px;
   background: #f0edeb;
   justify-content: space-around;
+  @media (max-width: 768px) {
+    align-content: space-between;
+    display:flex;
+    flex-wrap: wrap;
+  }
 `;
 
 const RecentUsers = styled.div`
@@ -68,10 +76,22 @@ const TitlePanel = styled.div`
 
 const UsersPage = () => {
   const [allUser, setAllUser] = useState();
+  let dispatch = useDispatch();
+  let state = useSelector((state) => state);
 
   useEffect(() => {
     getBooks();
   }, []);
+
+  useEffect(() => {
+    handleDispatch();
+  }, [allUser]);
+
+  const handleDispatch = () => {
+    dispatch(appendData({
+      AllUsers: allUser
+    }));
+  };
 
   const getBooks = async () => {
     const users = await getAllUsers();
@@ -101,7 +121,7 @@ const UsersPage = () => {
               <Button>Add New User</Button>
             </Link>
             </TitlePanel>
-            {allUser?.map((user, key) => {
+            {state.AllUsers?.map((user, key) => {
               return <UserInfo User={user} />;
             })}
           </RecentUsers>

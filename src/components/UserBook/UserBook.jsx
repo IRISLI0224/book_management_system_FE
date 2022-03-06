@@ -9,6 +9,10 @@ import { Modal } from "antd";
 import "antd/dist/antd.css";
 import BorrowedBookInfo from "../BorrowedBookInfo";
 import CustomModal from "../CustomModal";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import {appendData} from '../../redux/action'
+
 const moment = require("moment");
 
 const Container = styled.div`
@@ -18,6 +22,10 @@ const Container = styled.div`
   padding: 60px 0px;
   background: #f1e6dc;
   justify-content: space-around;
+  @media (max-width: 768px) {
+    justify-content: space-around;
+    flex-direction: column;
+  }
 `;
 const Text = styled.div`
   color: #5c4c4c;
@@ -50,26 +58,37 @@ const UserBook = ({ userid, Book }) => {
   const [APIMessage, setAPIMessage] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [allBook, setAllBook] = useState();
+  let dispatch = useDispatch();
+  let state = useSelector((state) => state);
 
   useEffect(() => {
-    getBooks();
+    initialData()
   }, []);
+
+  useEffect(() => {
+    handleDispatch();
+  }, [allBook,Book]);
 
   const getBooks = async () => {
     const books = await getAllBooks();
-    if (books) setAllBook(books);
-  };
-
-  const handleDelete = async () => {
-    const user = await DeleteUser(userid);
-    if (user === "user deleted") {
-      setAPIMessage("Delete user successfully!");
-      setModalVisible(true);
-    } else {
-      setAPIMessage("Something Wrong, pleas try later.");
-      setModalVisible(true);
+    if (books) {
+      setAllBook(books);    
     }
   };
+
+  const initialData=async()=>{
+    await getBooks();
+    handleDispatch();
+  }
+
+  const handleDispatch = () => {
+    dispatch(appendData({
+      BorrowedBooks: Book,
+      InStockBooks: allBook,
+    }));
+  };
+
+
 
   const Redirection = () => {
     setModalVisible(false);
@@ -86,15 +105,17 @@ const UserBook = ({ userid, Book }) => {
     <Container>
       <BorrowedBooks>
         <Text>Borrowed Books</Text>
-        {Book?.map((book, key) => {
-          return <BorrowedBookInfo Book={book} userId={userid}/>;
+        {state?.BorrowedBooks?.map((book, key) => {
+          return <BorrowedBookInfo Book={book} userId={userid} />;
         })}
       </BorrowedBooks>
       <BookInStock>
         <Text>Available Books</Text>
-        {allBook?.map((book, key) => {
+        {state?.InStockBooks?.map((book, key) => {
           if (!book?.borrowed)
-            return <BorrowedBookInfo Book={book} Borrow="true" userId={userid}/>;
+            return (
+              <BorrowedBookInfo Book={book} Borrow="true" userId={userid} />
+            );
         })}
       </BookInStock>
     </Container>

@@ -52,6 +52,9 @@ const BookCover = styled.img`
   height: 200px;
   width: auto;
   margin-top: 50px;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const Input = styled.input`

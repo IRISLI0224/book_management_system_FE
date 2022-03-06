@@ -69,6 +69,7 @@ const RecentBooks = styled.div`
 const RecentPanel = styled.div`
   margin-top: 10px;
   display: flex;
+  flex-wrap: wrap;
 `;
 
 const Text = styled.div`
@@ -91,8 +92,6 @@ const Home = () => {
   };
   const getUsers = async () => {
     const users = await getRecentUsers();
-    //test console
-    console.log(users)
     if (users) setUsers(users);
   };
   return (
@@ -111,16 +110,21 @@ const Home = () => {
           <RecentUsers>
             <br />
             <Text>Recent Users</Text>
-            {Users?.map((user, key) => {
-              return <UserInfo User={user} recent="true" />;
-            })}
+
+            {Users ? (
+              Users?.map((user, key) => {
+                return <UserInfo User={user} recent="true" />;
+              })
+            ) : (
+              <div>No user in the database</div>
+            )}
           </RecentUsers>
           <RecentBooks>
             <br />
             <Text>Recent Books</Text>
-            {Books?.map((book, key) => {
+            {Books?Books?.map((book, key) => {
               return <BookInfo Book={book} recent="true" />;
-            })}
+            }):<div>No Book in the database</div>}
           </RecentBooks>
         </RecentPanel>
         <Footer />

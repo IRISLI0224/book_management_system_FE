@@ -11,13 +11,8 @@ const appendData = (obj) => {
 	}
 }
 
-const logout=()=>{
-  localStorage.removeItem('email')
-  localStorage.removeItem('id')
-  return ("LOGOUT");
-}
+
 
 export {
 	appendData,
-	logout
 }
