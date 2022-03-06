@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import One from "../../components/One";
+import One from "../../components/Header";
 import Two from "../../components/Two";
 
 const Container = styled.div`
@@ -8,7 +8,7 @@ const Container = styled.div`
   margin: auto;
   text-align: center;
   width: 100%;
-  background-color: #edf6ff;
+  background-color: #ffffff;
 `;
 
 const MainPanel = styled.div`

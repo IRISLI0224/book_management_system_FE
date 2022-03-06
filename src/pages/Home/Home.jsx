@@ -1,14 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-import One from "../../components/One";
-import Two from "../../components/Two";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import { Button } from "../../components/Button";
 
 const Container = styled.div`
   height: auto;
   margin: auto;
   text-align: center;
   width: 100%;
-  background-color: #edf6ff;
+  background-color: #ffffff;
 `;
 
 const MainPanel = styled.div`
@@ -16,28 +17,77 @@ const MainPanel = styled.div`
   height: auto;
   margin: auto;
   text-align: center;
-  width: 80%;
-  background-image: -webkit-linear-gradient(-90deg, #5e85fc 0%, #c46dfd 100%);
+  width: 95%;
   border-radius: 10px;
 `;
 
-const Title = styled.h1`
-  margin-top: 100px;
-  color: #e9e9e9;
+const ButtonPanel = styled.div`
+  display: flex;
+  width: 100%;
+  height: auto;
+  padding: 60px 0px;
+  background: #f0edeb;
+  justify-content: space-around;
 `;
 
-const SubTitle = styled.h2`
-  color: #e9e9e9;
+const RecentUsers = styled.div`
+  height: auto;
+  margin: auto;
+  margin-bottom: 50px;
+  text-align: center;
+  width: 48%;
+  height: 300px;
+  background-color: #f0edebae;
+  border-radius: 10px;
+  margin-right:4%;
+  @media (max-width: 768px) {
+    width: 90%;
+  }
+`;
+
+const RecentBooks = styled.div`
+  height: auto;
+  margin: auto;
+  margin-bottom: 50px;
+  text-align: center;
+  width: 48%;
+  height: 300px;
+  background-color: #f0edebae;
+  border-radius: 10px;
+  @media (max-width: 768px) {
+    width: 90%;
+  }
+`;
+
+const RecentPanel = styled.div`
+  margin-top: 10px;
+  display: flex;
+`;
+
+const Text = styled.div`
+  color: #d6b8b0;
 `;
 
 const Home = () => {
   return (
     <Container>
       <MainPanel>
-        <Title>Book Management System</Title>
-        <SubTitle>By Iris Liang</SubTitle>
-        <One />
-        <Two />
+        <Header />
+        <ButtonPanel>
+          <Button>View All Users</Button>
+          <Button>View All Books</Button>
+        </ButtonPanel>
+        <RecentPanel>
+          <RecentUsers>
+            <br />
+            <Text>Recent Users</Text>
+          </RecentUsers>
+          <RecentBooks>
+            <br />
+            <Text>Recent Books</Text>
+          </RecentBooks>
+        </RecentPanel>
+        <Footer />
       </MainPanel>
     </Container>
   );
