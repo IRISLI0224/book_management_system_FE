@@ -7,6 +7,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { useParams, useLocation } from "react-router-dom";
 import validate from "../../components/UserInfo/validate";
+import UserBook from "../../components/UserBook";
 
 import {
   UpdateUserById,
@@ -123,6 +124,16 @@ const MainContent = styled.div`
 }
 `;
 
+const Books = styled.div`
+  display: flex;
+  width: 100%;
+  height: auto;
+  padding: 60px 0px;
+  background: #f1e6dc;
+  justify-content: space-around;
+`;
+
+
 const UserDetailPage = () => {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
@@ -135,6 +146,7 @@ const UserDetailPage = () => {
   const [Id, setId] = useState(useParams().id);
   const path = useLocation().pathname;
   const [add, setAdd] = useState(false);
+  const [borrowedBooks,setBorrowedBooks]=useState();
 
   useEffect(() => {
     if (path.indexOf("new") > 0) {
@@ -154,6 +166,7 @@ const UserDetailPage = () => {
       const Moment = moment(Data?.date_of_birth);
       setDate_of_birth(Moment.format("yyyy-MM-DD"));
       setEmail(Data?.email);
+      setBorrowedBooks(Data?.books);
     } else {
       setAPIMessage("Cannot find the user, try again later.");
       setModalVisible(true);
@@ -387,6 +400,7 @@ const UserDetailPage = () => {
             ) : null}
           </MainContent>
         </Form>
+        <UserBook userid={Id} Book={borrowedBooks}/>
         <Footer />
       </MainPanel>
     </Container>

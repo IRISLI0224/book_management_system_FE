@@ -7,6 +7,7 @@ const API_CREATE_BOOK = "/create/book";
 const API_UPDATE_BOOK = "/books";
 const API_DELETE_BOOK = "/books";
 const API_BORROW_BOOK = "/books/borrow";
+const API_RETURN_BOOK = "/books/return";
 const API_RECENT_BOOKS = "/recent/books";
 
 export const getAllBooks = async () => {
@@ -87,6 +88,17 @@ export const UpdateBookById = async (id, name, author, categories) => {
 
 export const BorrowBook = async (bookid, userid) => {
   const url = `${API_BORROW_BOOK}/${bookid}/${userid}`;
+  try {
+    const response = await backendApi.put(url);
+    return response.data;
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
+};
+
+export const ReturnBook = async (bookid, userid) => {
+  const url = `${API_RETURN_BOOK}/${bookid}/${userid}`;
   try {
     const response = await backendApi.put(url);
     return response.data;
