@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -7,6 +7,7 @@ import BookInfo from "../../components/BookInfo";
 import UserInfo from "../../components/UserInfo";
 import { Link } from "react-router-dom";
 import { getRecentBooks } from "../../config/book";
+import { getAllUsers, getRecentUsers } from "../../config/user";
 
 const Container = styled.div`
   height: auto;
@@ -77,16 +78,23 @@ const Text = styled.div`
 
 const Home = () => {
   const [Books, setBooks] = useState();
+  const [Users, setUsers] = useState();
 
   useEffect(() => {
     getBooks();
+    getUsers();
   }, []);
 
   const getBooks = async () => {
     const books = await getRecentBooks();
     if (books) setBooks(books);
   };
-
+  const getUsers = async () => {
+    const users = await getRecentUsers();
+    //test console
+    console.log(users)
+    if (users) setUsers(users);
+  };
   return (
     <Container>
       <MainPanel>
@@ -103,23 +111,16 @@ const Home = () => {
           <RecentUsers>
             <br />
             <Text>Recent Users</Text>
-            <UserInfo recent='true'/>
-            <UserInfo recent='true'/>
-            <UserInfo recent='true'/>
-            <UserInfo recent='true'/>
-            <UserInfo recent='true'/>
+            {Users?.map((user, key) => {
+              return <UserInfo User={user} recent="true" />;
+            })}
           </RecentUsers>
           <RecentBooks>
             <br />
             <Text>Recent Books</Text>
             {Books?.map((book, key) => {
-              return <BookInfo Book={book} recent='true' />;
+              return <BookInfo Book={book} recent="true" />;
             })}
-            {/* <BookInfo recent='true'/>
-            <BookInfo recent='true'/>
-            <BookInfo recent='true'/>
-            <BookInfo recent='true'/>
-            <BookInfo recent='true'/> */}
           </RecentBooks>
         </RecentPanel>
         <Footer />

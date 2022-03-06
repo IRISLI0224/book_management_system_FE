@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { DeleteUser } from "../../config/user";
 import { Modal } from "antd";
 import "antd/dist/antd.css";
+const moment = require("moment");
 
 const Container = styled.div`
   box-shadow: rgb(0 0 0 / 20%) 0px 0.0625rem 0.1875rem 0px;
@@ -91,8 +92,12 @@ const UserInfo = ({ recent, User }) => {
       <BookCover src={Avatar} />
       <InfoPanel>
         <Text>{User?.name}</Text>
-        <Text>Phone: {User?.phone}</Text>
-        <Text>Date of Birth: {User?.date_of_birthdate_of_birth}</Text>
+        {User?.phone ? <Text>Phone: {User?.phone}</Text> : null}
+        {User?.date_of_birth ? (
+          <Text>
+            Date of Birth: {moment(User?.date_of_birth).format("yyyy-MM-DD")}
+          </Text>
+        ) : null}
       </InfoPanel>
       <ButtonPanel>
         {recent ? (

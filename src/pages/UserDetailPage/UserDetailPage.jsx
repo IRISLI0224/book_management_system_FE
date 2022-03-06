@@ -17,7 +17,7 @@ import {
 import { Modal } from "antd";
 import InputErrorMsg from "../../components/InputErrorMsg";
 import "antd/dist/antd.css";
-const moment = require('moment');
+const moment = require("moment");
 
 const Container = styled.div`
   height: auto;
@@ -123,7 +123,6 @@ const MainContent = styled.div`
 }
 `;
 
-
 const UserDetailPage = () => {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
@@ -152,8 +151,8 @@ const UserDetailPage = () => {
       const Data = user;
       setPhone(Data?.phone);
       setName(Data?.name);
-      const Moment =moment(Data?.date_of_birth);
-      setDate_of_birth(Moment.format('yyyy-MM-DD'));
+      const Moment = moment(Data?.date_of_birth);
+      setDate_of_birth(Moment.format("yyyy-MM-DD"));
       setEmail(Data?.email);
     } else {
       setAPIMessage("Cannot find the user, try again later.");
@@ -196,9 +195,9 @@ const UserDetailPage = () => {
     } else {
       setNameError(false);
     }
-    const checkEmail=validate('email',email);
+    const checkEmail = validate("email", email);
     //test console
-    console.log(checkEmail)
+    console.log(checkEmail);
     if (checkEmail !== "") {
       setEmailError(true);
       return;
@@ -213,10 +212,21 @@ const UserDetailPage = () => {
 
   const handleSubmit = () => {
     //test console
-    console.log(name)
-    console.log(email)
-    console.log(phone)
-    console.log(date_of_birth)
+    console.log("running");
+    console.log(name);
+    console.log(email);
+    console.log(phone);
+    console.log(date_of_birth);
+    checkValues();
+  };
+
+  const handleAddNew = () => {
+    //test console
+    console.log("running");
+    console.log(name);
+    console.log(email);
+    console.log(phone);
+    console.log(date_of_birth);
     checkValues();
   };
 
@@ -232,7 +242,7 @@ const UserDetailPage = () => {
   };
 
   const EditUser = async () => {
-    const user = await UpdateUserById(Id,phone, name, date_of_birth);
+    const user = await UpdateUserById(Id, phone, name, date_of_birth);
     if (user.status == "200") {
       setAPIMessage("Edit user successfully");
       setModalVisible(true);
@@ -246,10 +256,10 @@ const UserDetailPage = () => {
   };
 
   const AddNewUser = async () => {
-    const user = await CreateUser(name, date_of_birth, phone,email);
+    const user = await CreateUser(email, name, phone, date_of_birth);
     if (user.status == "201") {
       setId(user?.data?._id);
-      setAPIMessage("Add User successfully!");
+      setAPIMessage("Add user successfully!");
       setModalVisible(true);
     } else if (user.status == "403") {
       setAPIMessage("User already exists!");
@@ -304,11 +314,12 @@ const UserDetailPage = () => {
           <br />
           {add ? (
             <AddButtonPanel>
-              <Text>Add new user</Text>
               <br />
-              <Button onClick={handleSubmit}>
+              <Button onClick={handleAddNew}>
                 &nbsp;&nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;&nbsp;
               </Button>
+              <Text>Add new user</Text>
+              <br />
             </AddButtonPanel>
           ) : (
             <Text>User detail information</Text>
@@ -329,9 +340,7 @@ const UserDetailPage = () => {
                 </InputPanel>
                 {nameError ? (
                   <InputErrorMsg>Name can't be empty!</InputErrorMsg>
-                ) : (
-                  null
-                )}
+                ) : null}
                 <br />
                 <InputPanel>
                   <div>Email:</div>

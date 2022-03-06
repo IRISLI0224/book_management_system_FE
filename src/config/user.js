@@ -14,7 +14,7 @@ export const getAllUsers = async () => {
   return response.data;
 };
 
-export const getRecentBooks = async () => {
+export const getRecentUsers = async () => {
   const url = `${API_RECENT_USERS}`;
   try {
     const response = await backendApi.get(url);
