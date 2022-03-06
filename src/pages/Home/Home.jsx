@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect,useState} from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -6,6 +6,7 @@ import { Button } from "../../components/Button";
 import BookInfo from "../../components/BookInfo";
 import UserInfo from "../../components/UserInfo";
 import { Link } from "react-router-dom";
+import { getRecentBooks } from "../../config/book";
 
 const Container = styled.div`
   height: auto;
@@ -75,6 +76,19 @@ const Text = styled.div`
 `;
 
 const Home = () => {
+  const [Books, setBooks] = useState();
+
+  useEffect(() => {
+    getBooks();
+  }, []);
+
+  const getBooks = async () => {
+    const books = await getRecentBooks();
+    //test console
+    console.log(books)
+    if (books) setBooks(books);
+  };
+
   return (
     <Container>
       <MainPanel>
@@ -100,11 +114,14 @@ const Home = () => {
           <RecentBooks>
             <br />
             <Text>Recent Books</Text>
+            {Books?.map((book, key) => {
+              return <BookInfo Book={book} recent='true' />;
+            })}
+            {/* <BookInfo recent='true'/>
             <BookInfo recent='true'/>
             <BookInfo recent='true'/>
             <BookInfo recent='true'/>
-            <BookInfo recent='true'/>
-            <BookInfo recent='true'/>
+            <BookInfo recent='true'/> */}
           </RecentBooks>
         </RecentPanel>
         <Footer />

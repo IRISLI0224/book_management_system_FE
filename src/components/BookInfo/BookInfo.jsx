@@ -1,8 +1,11 @@
-import React from "react";
+import React,{useState} from "react";
 import styled from "styled-components";
 import { Button } from "../Button";
 import BookCoverImg from "../../assets/img/bookCover1.png";
 import { Link } from "react-router-dom";
+import {  DeleteBook } from "../../config/book";
+import "antd/dist/antd.css";
+import { Modal } from "antd";
 
 const Container = styled.div`
   box-shadow: rgb(0 0 0 / 20%) 0px 0.0625rem 0.1875rem 0px;
@@ -32,6 +35,9 @@ const BookCover = styled.img`
 
 const InfoPanel = styled.div`
   width: 80%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 `;
 
 const ButtonPanel = styled.div`
@@ -42,27 +48,77 @@ const ButtonPanel = styled.div`
   margin-right: 20px;
 `;
 
-const BookInfo = ({ recent }) => {
+const BookInfo = ({ recent, Book }) => {
+  const url = "/book/" + Book?._id;
+  const [modalVisible, setModalVisible] = useState(false);
+  const [APIMessage, setAPIMessage] = useState("");
+  const handleDelete = async () => {
+    const book = await DeleteBook(Book?._id);
+    //test console
+    console.log(book);
+    if (book === "book deleted") {
+      setAPIMessage("Delete book successfully!");
+      setModalVisible(true);
+    } else {
+      setAPIMessage("Something Wrong, pleas try later.");
+      setModalVisible(true);
+    }
+  };
+
+  const Redirection = () => {
+    setModalVisible(false);
+    //After delete, back to all books page
+    if (
+      APIMessage === "Delete book successfully!" ||
+      APIMessage === "Cannot find the book, try again later."
+    ) {
+      window.location.href = "/books";
+    }
+  };
+
   return (
     <Container>
+            <Modal
+        visible={modalVisible}
+        footer={[
+          <div style={{ marginLeft: "200px" }}>
+            <Button key="OK" onClick={Redirection}>
+              &nbsp;&nbsp;OK&nbsp;&nbsp;
+            </Button>
+          </div>,
+        ]}
+      >
+        <p></p>
+        <p>{APIMessage}</p>
+        <p></p>
+      </Modal>
       <BookCover src={BookCoverImg} />
       <InfoPanel>
-        <Text>Book A</Text>
-        <Text>Author: A</Text>
-        <Text>Status: In stock</Text>
+        <div>
+          <Text>{Book?.name}</Text>
+          <Text>Author: {Book?.author}</Text>
+        </div>
+        <div>
+          <Text>Categories: {Book?.categories}</Text>
+          {Book.borrowed ? (
+            <Text>Status: Borrowed</Text>
+          ) : (
+            <Text>Status: In stock</Text>
+          )}
+        </div>
       </InfoPanel>
       <ButtonPanel>
         {recent ? (
-          <Link to="/book/:id" style={{ textDecoration: "none" }}>
+          <Link to={url} style={{ textDecoration: "none" }}>
             <Button>Details</Button>
           </Link>
         ) : (
           <ButtonPanel>
-            <Link to="/book/:id" style={{ textDecoration: "none" }}>
+            <Link to={url} style={{ textDecoration: "none" }}>
               <Button>&nbsp;&nbsp;Edit&nbsp;&nbsp;</Button>
             </Link>
             <div>&nbsp;&nbsp;&nbsp;</div>
-              <Button>Delete</Button>
+            <Button onClick={handleDelete}>Delete</Button>
           </ButtonPanel>
         )}
       </ButtonPanel>

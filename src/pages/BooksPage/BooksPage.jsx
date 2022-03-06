@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { Button } from "../../components/Button";
 import BookInfo from "../../components/BookInfo";
-import UserInfo from "../../components/UserInfo";
 import { Link } from "react-router-dom";
+import { getAllBooks } from "../../config/book";
 
 const Container = styled.div`
   height: auto;
@@ -75,6 +75,16 @@ const Text = styled.div`
 `;
 
 const BooksPage = () => {
+  const [allBook, setAllBook] = useState();
+
+  useEffect(() => {
+    getBooks();
+  }, []);
+
+  const getBooks = async () => {
+    const books = await getAllBooks();
+    if (books) setAllBook(books);
+  };
   return (
     <Container>
       <MainPanel>
@@ -90,12 +100,10 @@ const BooksPage = () => {
         <RecentPanel>
           <RecentBooks>
             <br />
-            <Text>Recent Books</Text>
-            <BookInfo />
-            <BookInfo />
-            <BookInfo />
-            <BookInfo />
-            <BookInfo />
+            <Text>All Books</Text>
+            {allBook?.map((book, key) => {
+              return <BookInfo Book={book} />;
+            })}
           </RecentBooks>
         </RecentPanel>
         <Footer />

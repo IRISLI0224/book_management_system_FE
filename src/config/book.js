@@ -7,6 +7,7 @@ const API_CREATE_BOOK = "/create/book";
 const API_UPDATE_BOOK = "/books";
 const API_DELETE_BOOK = "/books";
 const API_BORROW_BOOK = "/books/borrow";
+const API_RECENT_BOOKS = "/recent/books";
 
 export const getAllBooks = async () => {
   const url = `${API_GET_ALL_BOOKS}`;
@@ -18,6 +19,18 @@ export const getAllBooks = async () => {
     return e;
   }
 };
+
+export const getRecentBooks = async () => {
+  const url = `${API_RECENT_BOOKS}`;
+  try {
+    const response = await backendApi.get(url);
+    return response.data;
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
+};
+
 
 export const getBookById = async (id) => {
   const url = `${API_GET_BOOK}/${id}`;

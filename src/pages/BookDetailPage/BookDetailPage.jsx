@@ -30,7 +30,7 @@ const MainPanel = styled.div`
 
 const Form = styled.div`
   padding: 5px;
-  height: 350px;
+  height: 400px;
   margin: auto;
   text-align: center;
   border-radius: 10px;
@@ -90,6 +90,15 @@ const ButtonPanel = styled.div`
   flex-direction: column;
 `;
 
+const TopButtonPanel = styled.div`
+  display: flex;
+  width: 100%;
+  height: auto;
+  padding: 60px 0px;
+  background: #f1e6dc;
+  justify-content: space-around;
+`;
+
 const BookDetailPage = () => {
   const [borrowed, setBorrowed] = useState(false);
   const [name, setName] = useState();
@@ -109,8 +118,8 @@ const BookDetailPage = () => {
   const getBookInfo = async () => {
     const book = await getBookById(Id);
     //test console
-    console.log(typeof(book));
-    if (typeof(book)!=='string') {
+    console.log(typeof book);
+    if (typeof book !== "string") {
       const Data = book;
       setAuthor(Data?.author);
       setName(Data?.name);
@@ -180,8 +189,8 @@ const BookDetailPage = () => {
   const handleDelete = async () => {
     const book = await DeleteBook(Id);
     //test console
-    console.log(book)
-    if (book == "book deleted") {
+    console.log(book);
+    if (book === "book deleted") {
       setAPIMessage("Delete book successfully!");
       setModalVisible(true);
     } else {
@@ -210,8 +219,8 @@ const BookDetailPage = () => {
     setModalVisible(false);
     //After delete, back to all books page
     if (
-      APIMessage == "Delete book successfully!" ||
-      APIMessage == "Cannot find the book, try again later."
+      APIMessage === "Delete book successfully!" ||
+      APIMessage === "Cannot find the book, try again later."
     ) {
       window.location.href = "/books";
     }
@@ -235,7 +244,17 @@ const BookDetailPage = () => {
       </Modal>
       <MainPanel>
         <Header />
+        <TopButtonPanel>
+          <Link to="/books" style={{ textDecoration: "none" }}>
+            <Button>Back to all Books Page</Button>
+          </Link>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Button>Back to Homepage</Button>
+          </Link>
+        </TopButtonPanel>
         <Form>
+          <br />
+          <br />
           <Text>Book detail information</Text>
           <Fields>
             <BookCover src={BookCoverImg} />
