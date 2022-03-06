@@ -54,8 +54,6 @@ const BookInfo = ({ recent, Book }) => {
   const [APIMessage, setAPIMessage] = useState("");
   const handleDelete = async () => {
     const book = await DeleteBook(Book?._id);
-    //test console
-    console.log(book);
     if (book === "book deleted") {
       setAPIMessage("Delete book successfully!");
       setModalVisible(true);

@@ -36,8 +36,6 @@ export const getBookById = async (id) => {
   const url = `${API_GET_BOOK}/${id}`;
   try {
     const response = await backendApi.get(url);
-    //test console
-    console.log(response)
     return response.data;
   } catch (e) {
     console.log(e);

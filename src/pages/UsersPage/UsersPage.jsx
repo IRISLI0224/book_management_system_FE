@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -6,6 +6,7 @@ import { Button } from "../../components/Button";
 import BookInfo from "../../components/BookInfo";
 import UserInfo from "../../components/UserInfo";
 import { Link } from "react-router-dom";
+import { getAllUsers } from "../../config/user";
 
 const Container = styled.div`
   height: auto;
@@ -48,7 +49,6 @@ const RecentUsers = styled.div`
   }
 `;
 
-
 const RecentPanel = styled.div`
   margin-top: 10px;
   display: flex;
@@ -59,12 +59,32 @@ const Text = styled.div`
   font-size: 20px;
 `;
 
+const TitlePanel = styled.div`
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
 const UsersPage = () => {
+  const [allUser, setAllUser] = useState();
+
+  useEffect(() => {
+    getBooks();
+  }, []);
+
+  const getBooks = async () => {
+    const users = await getAllUsers();
+    if (users) setAllUser(users);
+  };
   return (
     <Container>
       <MainPanel>
         <Header />
         <ButtonPanel>
+          <Link to="/user/new" style={{ textDecoration: "none" }}>
+            <Button>Add New User</Button>
+          </Link>
           <Link to="/" style={{ textDecoration: "none" }}>
             <Button>Back to Homepage</Button>
           </Link>
@@ -75,12 +95,15 @@ const UsersPage = () => {
         <RecentPanel>
           <RecentUsers>
             <br />
-            <Text>Recent Users</Text>
-            <UserInfo />
-            <UserInfo />
-            <UserInfo />
-            <UserInfo />
-            <UserInfo />
+            <TitlePanel>
+            <Text>All Users</Text>
+            <Link to="/user/new" style={{ textDecoration: "none" }}>
+              <Button>Add New User</Button>
+            </Link>
+            </TitlePanel>
+            {allUser?.map((user, key) => {
+              return <UserInfo User={user} />;
+            })}
           </RecentUsers>
         </RecentPanel>
         <Footer />

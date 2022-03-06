@@ -1,9 +1,29 @@
 //All API about user
-import backendApi from './backendApi';
+import backendApi from "./backendApi";
 
-const API_GET_USER = '/users';
-const API_LOGIN_URL = '/login';
-const API_REGISTER_URL = '/register';
+const API_GET_ALL_USER = "/users";
+const API_GET_USER = "/users";
+const API_CREATE_USER = "/create/user";
+const API_UPDATE_USER = "/users";
+const API_DELETE_USER = "/users";
+const API_RECENT_USERS = "/recent/users";
+
+export const getAllUsers = async () => {
+  const url = `${API_GET_ALL_USER}`;
+  const response = await backendApi.get(url);
+  return response.data;
+};
+
+export const getRecentBooks = async () => {
+  const url = `${API_RECENT_USERS}`;
+  try {
+    const response = await backendApi.get(url);
+    return response.data;
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
+};
 
 export const getUserById = async (id) => {
   const url = `${API_GET_USER}/${id}`;
@@ -11,30 +31,56 @@ export const getUserById = async (id) => {
   return response.data;
 };
 
-export const UserLogin = async (email, password) => {
+export const CreateUser = async (email, name, phone, date_of_birth) => {
   const data = {
     email,
-    password,
+    name,
+    phone,
+    date_of_birth,
   };
-
-  const res = await backendApi.post(API_LOGIN_URL, data).catch(function (e) {
-    if (e.response) {
-      return e.response;
-    }
-  });
-  return res;
+  try {
+    const res = await backendApi
+      .post(API_CREATE_USER, data)
+      .catch(function (e) {
+        if (e.response) {
+          return e.response;
+        }
+      });
+    return res;
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
 };
 
-export const UserRegister = async (email, password) => {
+export const UpdateUserById = async (id, phone, name, date_of_birth) => {
   const data = {
-    email,
-    password,
+    phone,
+    name,
+    date_of_birth,
   };
+  try {
+    const res = await backendApi
+      .put(`${API_UPDATE_USER}/${id}`, data)
+      .catch(function (e) {
+        if (e.response) {
+          return e.response;
+        }
+      });
+    return res;
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
+};
 
-  const res = await backendApi.post(API_REGISTER_URL, data).catch(function (e) {
-    if (e.response) {
-      return e.response;
-    }
-  });
-  return res;
+export const DeleteUser = async (id) => {
+  const url = `${API_DELETE_USER}/${id}`;
+  try {
+    const response = await backendApi.delete(url);
+    return response.data;
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
 };

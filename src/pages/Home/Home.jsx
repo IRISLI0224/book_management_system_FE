@@ -84,8 +84,6 @@ const Home = () => {
 
   const getBooks = async () => {
     const books = await getRecentBooks();
-    //test console
-    console.log(books)
     if (books) setBooks(books);
   };
 

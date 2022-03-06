@@ -139,8 +139,6 @@ const BookDetailPage = () => {
 
   const getBookInfo = async () => {
     const book = await getBookById(Id);
-    //test console
-    console.log(typeof book);
     if (typeof book !== "string") {
       const Data = book;
       setAuthor(Data?.author);
@@ -156,8 +154,6 @@ const BookDetailPage = () => {
       setModalVisible(true);
     }
 
-    // //test console
-    // console.log(book);
   };
 
   const handleOnBlur = (event) => {
@@ -205,18 +201,11 @@ const BookDetailPage = () => {
   };
 
   const handleSubmit = () => {
-    //test console
-    console.log(name);
-    console.log(author);
-    console.log(categories);
-    console.log(Id);
     checkValues();
   };
 
   const handleDelete = async () => {
     const book = await DeleteBook(Id);
-    //test console
-    console.log(book);
     if (book === "book deleted") {
       setAPIMessage("Delete book successfully!");
       setModalVisible(true);
@@ -228,8 +217,6 @@ const BookDetailPage = () => {
 
   const EditBook = async () => {
     const book = await UpdateBookById(Id, name, author, categories);
-    //test console
-    console.log(book.status);
     if (book.status == "200") {
       setAPIMessage("Edit book successfully");
       setModalVisible(true);
@@ -244,13 +231,8 @@ const BookDetailPage = () => {
 
   const AddNewBook = async () => {
     const book = await CreateBook(name, author, categories);
-    //test console
-    console.log(book.status);
     if (book.status == "201") {
       setId(book?.data?._id)
-      //test console
-      console.log(book.data)
-      console.log(Id)
       setAPIMessage("Add book successfully!");
       setModalVisible(true);
     } else if (book.status == "403") {
