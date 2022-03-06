@@ -152,11 +152,6 @@ const BorrowedBookInfo = ({ Book, Borrow, userId }) => {
         </div>
         <div>
           <Text>Categories: {Book?.categories}</Text>
-          {Book?.borrowed ? (
-            <Text>Status: Borrowed</Text>
-          ) : (
-            <Text>Status: In stock</Text>
-          )}
         </div>
       </InfoPanel>
       <ButtonPanel>
