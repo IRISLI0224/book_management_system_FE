@@ -1,5 +1,4 @@
 # Getting Started with Create React App
-Run by npm run statt
 Demo page:https://book-management-system-iris.netlify.app/
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
